@@ -24,10 +24,11 @@ app.use('/api/shop',shopRoutes)
 app.use(notFound)
 app.use(errorHandler)
 
-const PORT=process.env.PORT || 5000
-app.listen(PORT, console.log(`Server is Running ${PORT}`))
-
 // verify the server ready by using default endpoint if necessary;
 app.get('/', (req, res) => {
 	res.send('REST APIs  KMAMS');
 });
+
+const PORT=process.env.PORT || 5000
+app.listen(PORT, console.log(`Server is Running ${PORT}`))
+
