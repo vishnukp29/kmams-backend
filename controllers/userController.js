@@ -140,15 +140,16 @@ const updatePassword = expressAsyncHandler(async (req, res) => {
 
 //Profile photo upload
 const profilePhotoUpload = expressAsyncHandler(async (req, res) => {
-  //Find the login user
-  const { _id } = req.user;
 
   //1. Get the Path to image
-  const localPath = `public/images/profile/${req.file.filename}`; 
+  const localPath = `public/images/profile/${req.file.filename}`;
 
   //2.Upload to cloudinary
   const imgUploaded = await cloudinaryUploadImg(localPath);
 
+  //Find the login user
+  const { _id } = req.user;
+  
   const foundUser = await User.findByIdAndUpdate(
     _id,
     {
@@ -156,11 +157,12 @@ const profilePhotoUpload = expressAsyncHandler(async (req, res) => {
     },
     { new: true }
   );
-
-  //remove the saved img
-  fs.unlinkSync(localPath);
-  res.json(imgUploaded);
+  
+   //remove the saved img
+   fs.unlinkSync(localPath);
+   res.json(imgUploaded);
 });
+
 
 module.exports= {
     userRegister,
