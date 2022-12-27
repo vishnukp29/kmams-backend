@@ -86,17 +86,7 @@ const userProfile = expressAsyncHandler(async (req, res) => {
 
   try {
     const myProfile = await User.findById(id)
-    const alreadyViewed = myProfile?.viewedBy?.find((user) => {
-      return user?._id?.toString() === loginUserId;
-    });
-    if (alreadyViewed) {
-      res.json(myProfile);
-    } else {
-      const profile = await User.findByIdAndUpdate(myProfile?._id, {
-        $push: { viewedBy: loginUserId },
-      });
-      res.json(profile);
-    }
+    res.json(myProfile);
   } catch (error) {
     res.json(error);
   }
