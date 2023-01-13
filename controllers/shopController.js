@@ -4,6 +4,8 @@ const Shop = require('../models/Shop/shopModel')
 const User = require("../models/User/userModel");
 const validateMongodbId = require("../utils/validateMongodbId");
 const cloudinaryUploadImg = require("../utils/cloudinary");
+const { errorHandler } = require("../middlewares/errorHandler");
+
 
 // Register Shop
 const registerShop = expressAsyncHandler(async (req, res) => {
@@ -123,58 +125,48 @@ const updateShop = expressAsyncHandler(async (req, res) => {
 
 // Approve Shop
 const toggleApproveShop = expressAsyncHandler(async (req, res) => {
+
+  if (req.user.isAdmin=== false) {
+    return res.status(403).json({
+      success:false,
+      message:"Unautherized Access"
+    })
+  }
+  console.log(req.body,"======body");
   //1.Find the post to be liked
   const { shopId } = req.body;
   const shop = await Shop.findById(shopId);
+  if(!shop){
+    return res.status(403).json({
+      success:false,
+      message:"shop not found"
+    })
+  }
   
   //2. Find the login user
   const loginUserId = req?.user?._id;
-  
-  const isApproved = shop?.isApproved;
-  
-  //4.Chech if this user has dislikes this post
-  const alreadyApproved = isApproved?.deny?.find(
-    shopId => shopId?.toString() === loginUserId?.toString()
-  );
-  
-  //5.remove the user from dislikes array if exists
-  if (alreadyApproved) {
-    const shop = await Shop.findByIdAndUpdate(
-      shopId,
-      {
-        $pull: { deny: loginUserId },
-        isDenied: false,
-      },
-      { new: true }
-    );
-    res.json(shop);
+  let message
+  if(shop.isApproved){
+    message = "shop denied"
+  }else{
+    message = "shop Approved"
   }
+
+  const approved = await Shop.findByIdAndUpdate(shopId,{
+    isApproved:!shop.isApproved
+  },{new:true});
+
+  res.status(201).json({
+    success:true,
+    message,
+    approved
+  })
   
-  //Toggle
-  //Remove the user if he has liked the post
-  if (isApproved) {
-    const shop = await Shop.findByIdAndUpdate(
-      shopId,
-      {
-        $pull: { approve: loginUserId },
-        isApproved: false,
-      },
-      { new: true }
-    );
-    res.json(shop);
-  } else {
-    //add to likes
-    const shop = await Shop.findByIdAndUpdate(
-      shopId,
-      {
-        $push: { approve: loginUserId },
-        isApproved: true,
-      },
-      { new: true }
-    );
-    res.json(shop);
-  }
+  
+  
 });
+
+
 
 module.exports = {
     registerShop,

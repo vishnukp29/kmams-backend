@@ -52,22 +52,6 @@ const shopSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    isDenied: {
-      type: Boolean,
-      default: false,
-    },
-    approve: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-    deny: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
   },
   {
     toJSON: {
