@@ -13,6 +13,7 @@ const authMiddleware = require('../middlewares/AuthMiddleware')
 const { pictureUpload,profilePhotoResize} = require('../middlewares/photoUpload')
 
 const userRoutes=express.Router()
+
 userRoutes.post('/register',userRegister)
 userRoutes.post('/login',loginUser)
 userRoutes.get('/',authMiddleware,fetchUsers)

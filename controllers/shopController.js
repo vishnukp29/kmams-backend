@@ -71,10 +71,10 @@ const fetchSingleShop = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongodbId(id);
   try {
-    const shop = await Shop.findById(id)
+    const shop = await Shop.findById(id).populate('approve').populate('deny')
     res.json(shop);
   } catch (error) {
-    res.json(error);
+    res.json(error)
   }
 });
 
@@ -121,6 +121,61 @@ const updateShop = expressAsyncHandler(async (req, res) => {
   }
 });
 
+// Approve Shop
+const toggleApproveShop = expressAsyncHandler(async (req, res) => {
+  //1.Find the post to be liked
+  const { shopId } = req.body;
+  const shop = await Shop.findById(shopId);
+  
+  //2. Find the login user
+  const loginUserId = req?.user?._id;
+  
+  const isApproved = shop?.isApproved;
+  
+  //4.Chech if this user has dislikes this post
+  const alreadyApproved = isApproved?.deny?.find(
+    shopId => shopId?.toString() === loginUserId?.toString()
+  );
+  
+  //5.remove the user from dislikes array if exists
+  if (alreadyApproved) {
+    const shop = await Shop.findByIdAndUpdate(
+      shopId,
+      {
+        $pull: { deny: loginUserId },
+        isDenied: false,
+      },
+      { new: true }
+    );
+    res.json(shop);
+  }
+  
+  //Toggle
+  //Remove the user if he has liked the post
+  if (isApproved) {
+    const shop = await Shop.findByIdAndUpdate(
+      shopId,
+      {
+        $pull: { approve: loginUserId },
+        isApproved: false,
+      },
+      { new: true }
+    );
+    res.json(shop);
+  } else {
+    //add to likes
+    const shop = await Shop.findByIdAndUpdate(
+      shopId,
+      {
+        $push: { approve: loginUserId },
+        isApproved: true,
+      },
+      { new: true }
+    );
+    res.json(shop);
+  }
+});
+
 module.exports = {
     registerShop,
     fetchShops,
@@ -128,5 +183,6 @@ module.exports = {
     fetchSingleShop,
     deleteShop,
     updateShop, 
+    toggleApproveShop,
 }
   
