@@ -58,6 +58,16 @@ const fetchShops = expressAsyncHandler(async (req, res) => {
   }
 });
 
+//Fetch Approved Shops
+const fetchApprovedShops = expressAsyncHandler(async (req, res) => {
+  try {
+    const shops = await Shop.find({"isApproved":true})
+      res.json(shops);
+  } catch (error) {
+    res.json(error)
+  }
+});
+
   //Fetch new Shops
   const newShops = expressAsyncHandler(async (req, res) => {
     try {
@@ -73,7 +83,7 @@ const fetchSingleShop = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongodbId(id);
   try {
-    const shop = await Shop.findById(id).populate('approve').populate('deny')
+    const shop = await Shop.findById(id)
     res.json(shop);
   } catch (error) {
     res.json(error)
@@ -160,10 +170,7 @@ const toggleApproveShop = expressAsyncHandler(async (req, res) => {
     success:true,
     message,
     approved
-  })
-  
-  
-  
+  }) 
 });
 
 
@@ -176,5 +183,6 @@ module.exports = {
     deleteShop,
     updateShop, 
     toggleApproveShop,
+    fetchApprovedShops
 }
   
