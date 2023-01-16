@@ -71,7 +71,7 @@ const fetchApprovedShops = expressAsyncHandler(async (req, res) => {
   //Fetch new Shops
   const newShops = expressAsyncHandler(async (req, res) => {
     try {
-      const shops = await Shop.find({}).sort({createdAt:-1}).limit(3)
+      const shops = await Shop.find({"isApproved":true}).sort({createdAt:-1}).limit(3)
         res.json(shops);
     } catch (error) {
       res.json(error)
