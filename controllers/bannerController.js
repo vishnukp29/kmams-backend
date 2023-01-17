@@ -10,7 +10,7 @@ const addBanner = expressAsyncHandler(async (req, res) => {
   const { _id } = req.user;
 
   //1. Get the Path to img
-  const bannerLocalPath = `public/images/banner/${req.files.bannerImageFilename}`;
+  const bannerLocalPath = `public/images/banner/${req.file.bannerImageFilename}`;
   console.log( bannerLocalPath, "Local path");
 
   //2.Upload to cloudinary

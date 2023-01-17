@@ -6,7 +6,6 @@ const validateMongodbId = require("../utils/validateMongodbId");
 const cloudinaryUploadImg = require("../utils/cloudinary");
 const { errorHandler } = require("../middlewares/errorHandler");
 
-
 // Register Shop
 const registerShop = expressAsyncHandler(async (req, res) => {
     const { _id } = req.user;

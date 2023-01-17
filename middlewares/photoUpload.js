@@ -45,14 +45,14 @@ const profilePhotoResize = async (req, res, next) => {
 //Image Resizing for Profile Picture
 const banerImageResize = async (req, res, next) => {
   //check if there is no file
-  if (!req.files) return next();
-  req.files.bannerImageFilename = `user-${Date.now()}-${req.files.bannerImage[0].originalname}`;
+  if (!req.file) return next();
+  req.file.bannerImageFilename = `user-${Date.now()}-${req.file.originalname}`;
 
-  await sharp(req.files.bannerImage[0].buffer)
-    .resize(250, 250)
+  await sharp(req.file.buffer)
+    .resize(1600, 600)
     .toFormat("jpeg")
     .jpeg({ quality: 90 })
-    .toFile(path.join(`public/images/banner/${req.files.bannerImageFilename}`));
+    .toFile(path.join(`public/images/banner/${req.file.bannerImageFilename}`));
   next();
 };
 
