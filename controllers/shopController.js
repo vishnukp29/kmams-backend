@@ -157,9 +157,9 @@ const toggleApproveShop = expressAsyncHandler(async (req, res) => {
   const loginUserId = req?.user?._id;
   let message
   if(shop.isApproved){
-    message = "shop denied"
+    message = "Shop Denied"
   }else{
-    message = "shop Approved"
+    message = "Shop Approved"
   }
 
   const approved = await Shop.findByIdAndUpdate(shopId,{
@@ -173,6 +173,45 @@ const toggleApproveShop = expressAsyncHandler(async (req, res) => {
   }) 
 });
 
+// Deny Shop
+const toggleDenyShop = expressAsyncHandler(async (req, res) => {
+
+  if (req.user.isAdmin=== false) {
+    return res.status(403).json({
+      success:false,
+      message:"Unautherized Access"
+    })
+  }
+  console.log(req.body,"======body");
+  //1.Find the post to be liked
+  const { shopId } = req.body;
+  const shop = await Shop.findById(shopId);
+  if(!shop){
+    return res.status(403).json({
+      success:false,
+      message:"shop not found"
+    })
+  }
+  
+  //2. Find the login user
+  const loginUserId = req?.user?._id;
+  let message
+  if(shop.isApproved){
+    message = "Shop Denied"
+  }else{
+    message = "Shop Approved"
+  }
+
+  const denied = await Shop.findByIdAndUpdate(shopId,{
+    isApproved:!shop.isApproved
+  },{new:false});
+
+  res.status(201).json({
+    success:false,
+    message,
+    denied
+  }) 
+});
 
 
 module.exports = {
@@ -183,6 +222,7 @@ module.exports = {
     deleteShop,
     updateShop, 
     toggleApproveShop,
-    fetchApprovedShops
+    toggleDenyShop,
+    fetchApprovedShops,
 }
   

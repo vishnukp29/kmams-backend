@@ -42,6 +42,20 @@ const profilePhotoResize = async (req, res, next) => {
   next();
 };
 
+//Image Resizing for Profile Picture
+const banerImageResize = async (req, res, next) => {
+  //check if there is no file
+  if (!req.files) return next();
+  req.files.bannerImageFilename = `user-${Date.now()}-${req.files.bannerImage[0].originalname}`;
+
+  await sharp(req.files.bannerImage[0].buffer)
+    .resize(250, 250)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toFile(path.join(`public/images/banner/${req.files.bannerImageFilename}`));
+  next();
+};
+
 //Image Resizing for Shop images
 const shopImageResize = async (req, res, next) => {
   //check if there is no file
@@ -76,4 +90,5 @@ module.exports = {
   profilePhotoResize,
   shopImageResize,
   certImageResize,
+  banerImageResize,
 };
