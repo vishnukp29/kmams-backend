@@ -138,9 +138,9 @@ const profilePhotoUpload = expressAsyncHandler(async (req, res) => {
   const imgUploaded = await cloudinaryUploadImg(localPath);
 
   //Find the login user
-  const { _id } = req.user;
+  const { _id } = req.user; 
   
-  const foundUser = await User.findByIdAndUpdate(
+  const foundUser = await User.findByIdAndUpdate( 
     _id,
     {
       profilePicture: imgUploaded?.url,
