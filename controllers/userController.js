@@ -78,7 +78,7 @@ const userDetails = expressAsyncHandler(async (req, res) => {
   }
 });
 
-// USer Profile
+// User Profile
 const userProfile = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongodbId(id);

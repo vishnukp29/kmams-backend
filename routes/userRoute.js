@@ -18,7 +18,7 @@ userRoutes.post('/register',userRegister)
 userRoutes.post('/login',loginUser)
 userRoutes.get('/',authMiddleware,fetchUsers)
 userRoutes.put('/updatepassword',authMiddleware,updatePassword)
-userRoutes.put('/profilephoto',authMiddleware, pictureUpload.single('image'),profilePhotoResize,profilePhotoUpload)
+userRoutes.put('/profilephoto',authMiddleware, pictureUpload.single('profilePhoto'),profilePhotoResize,profilePhotoUpload)
 userRoutes.put('/',authMiddleware,updateProfile)
 
 userRoutes.get('/:id',authMiddleware,userDetails)
