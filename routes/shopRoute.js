@@ -9,6 +9,8 @@ const {
   toggleApproveShop, 
   fetchApprovedShops,
   toggleDenyShop,
+  approveShop,
+  denyShop
 } = require("../controllers/shopController");
 const authMiddleware = require("../middlewares/AuthMiddleware");
 const {
@@ -31,8 +33,8 @@ shopRoutes.post(
 shopRoutes.get("/", fetchShops);
 shopRoutes.get("/newly", newShops);
 shopRoutes.get("/approved",  fetchApprovedShops);
-shopRoutes.put('/approve',authMiddleware,toggleApproveShop)
-shopRoutes.put('/deny',authMiddleware,toggleDenyShop)
+shopRoutes.put('/approve/:id',authMiddleware,approveShop)
+shopRoutes.put('/deny/:id',authMiddleware,denyShop)
 shopRoutes.get("/:id", fetchSingleShop);
 shopRoutes.put("/:id", authMiddleware, updateShop);
 shopRoutes.delete("/:id", authMiddleware, deleteShop);

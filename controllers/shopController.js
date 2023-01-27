@@ -212,6 +212,38 @@ const toggleDenyShop = expressAsyncHandler(async (req, res) => {
   }) 
 });
 
+//Approve Shop
+const approveShop = expressAsyncHandler(async (req, res) => {
+  const {id} = req.params; 
+  // const { shopId } = req.body;
+  validateMongodbId(id);
+ 
+  const shop = await Shop.findByIdAndUpdate(
+    id,
+    {
+      isApproved: true,
+    },
+    { new: true }
+  );
+  res.json(shop);
+});
+
+//Deny Shop
+const denyShop = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  // const { shopId } = req.body;
+  validateMongodbId(id);
+
+  const shop = await Shop.findByIdAndUpdate(
+    id,
+    {
+      isApproved: false,
+    },
+    { new: true }
+  );
+  res.json(shop);
+});
+
 
 module.exports = {
     registerShop,
@@ -223,5 +255,7 @@ module.exports = {
     toggleApproveShop,
     toggleDenyShop,
     fetchApprovedShops,
+    approveShop,
+    denyShop,
 }
   
