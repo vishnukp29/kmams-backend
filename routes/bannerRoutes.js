@@ -1,5 +1,5 @@
 const express = require("express");
-const {addBanner, fetchBanners, deleteBanner} = require("../controllers/bannerController");
+const {addBanner, fetchBanners, deleteBanner,fetchSingleBanner} = require("../controllers/bannerController");
 const authMiddleware = require("../middlewares/AuthMiddleware");
 const {
   pictureUpload,
@@ -18,5 +18,6 @@ bannerRoutes.post(
 
 bannerRoutes.get("/", fetchBanners);
 bannerRoutes.delete("/:id", authMiddleware, deleteBanner);
+bannerRoutes.get("/:id", authMiddleware, fetchSingleBanner);
 
 module.exports = bannerRoutes;

@@ -40,6 +40,18 @@ const fetchBanners = expressAsyncHandler(async (req, res) => {
   }
 });
 
+//Fetch a single banner
+const fetchSingleBanner = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  validateMongodbId(id);
+  try {
+    const banner = await Banner.findById(id)
+    res.json(banner);
+  } catch (error) {
+    res.json(error)
+  }
+});
+
 // Delete Banners
 const deleteBanner = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -56,5 +68,6 @@ const deleteBanner = expressAsyncHandler(async (req, res) => {
 module.exports = {
   addBanner,
   fetchBanners,
+  fetchSingleBanner,
   deleteBanner
 };
