@@ -18,6 +18,6 @@ bannerRoutes.post(
 
 bannerRoutes.get("/", fetchBanners);
 bannerRoutes.delete("/:id", authMiddleware, deleteBanner);
-bannerRoutes.get("/:id", authMiddleware, fetchSingleBanner);
+bannerRoutes.get("/:id", fetchSingleBanner);
 
 module.exports = bannerRoutes;
