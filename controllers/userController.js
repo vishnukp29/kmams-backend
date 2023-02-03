@@ -150,7 +150,7 @@ const profilePhotoUpload = expressAsyncHandler(async (req, res) => {
   
    //remove the saved img
    fs.unlinkSync(localPath);
-   res.json(imgUploaded);
+   res.json(foundUser);
 });
 
 
