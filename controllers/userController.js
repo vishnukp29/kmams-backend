@@ -138,20 +138,40 @@ const profilePhotoUpload = expressAsyncHandler(async (req, res) => {
   const imgUploaded = await cloudinaryUploadImg(localPath);
 
   //Find the login user
-  const { _id } = req.user; 
+  const { _id } = req.user;
   
-  const foundUser = await User.findByIdAndUpdate( 
-    _id,
-    {
-      profilePicture: imgUploaded?.url,
-    },
-    { new: true }
-  );
+  const foundUser = await User.findByIdAndUpdate(
+		_id,
+		{
+			profilePicture: imgUploaded?.url,
+		},
+		{ new: true }
+	);
   
    //remove the saved img
    fs.unlinkSync(localPath);
-   res.json(foundUser);
+	res.json(foundUser);
 });
+
+// const profilePhotoUpload = expressAsyncHandler(async (req, res) => {
+// 	// check user blocked or not
+// 	// 1. Get the path to img
+// 	const localPath = `public/images/profile/${req.file.fileName}`;
+// 	// 2.Upload to cloudinary
+// 	const imgUploaded = await cloudinaryUploadImg(localPath);
+// 	//3. Find the login user
+// 	const { _id } = req.user;
+// 	const foundUser = await User.findByIdAndUpdate(
+// 		_id,
+// 		{
+// 			profilePhoto: imgUploaded?.url,
+// 		},
+// 		{ new: true }
+// 	);
+// 	// Remove the saved profile photo from storage
+// 	fs.unlinkSync(localPath);
+// 	res.json(foundUser);
+// });
 
 
 module.exports= {
