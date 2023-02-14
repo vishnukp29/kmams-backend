@@ -1,6 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 require("dotenv").config();
-// const EmailMsg = require("../models/email/emailMessagingModel");
+const EmailMsg = require("../models/Email/emailModel");
 // const Filter = require("bad-words");
 const nodemailer = require("nodemailer");
 // const hbs = require("nodemailer-express-handlebars");
@@ -19,24 +19,30 @@ const sendMailHelper = (msg) => {
 		const { to, from, subject, html,message, sentBy } = msg;
 		// Get the message
 		const emailMessage = subject + " " + message;
-		
-		let mailOptions = {
-            to,
-            from,
-            subject,
-            html,
-        };
-        // send msg
-        transporter.sendMail(mailOptions, function (err, data) {
-            if (err) {
-                console.log("Error Occurs", err);
-                reject(err);
-            } else {
-                console.log("Email sent", data);
-                resolve(data);
-            }
-        });
-        
+		// Prevent profanity /bad words
+		const filter = new Filter();
+		const isProfane = filter.isProfane(emailMessage);
+		if (isProfane) {
+			let err = "Email sent failed ,because it contain profane words";
+			reject(err);
+		} else {
+			let mailOptions = {
+				to,
+				from,
+				subject,
+				html,
+			};
+			// send msg
+			transporter.sendMail(mailOptions, function (err, data) {
+				if (err) {
+					console.log("Error Occurs", err);
+					reject(err);
+				} else {
+					console.log("Email sent", data);
+					resolve(data);
+				}
+			});
+		}
 	});
 };
 

@@ -5,7 +5,9 @@ const dbConnect=require('./config/DB/dbConfig')
 const {notFound , errorHandler} = require('./middlewares/errorHandler')
 const userRoutes = require('./routes/userRoute')
 const shopRoutes = require('./routes/shopRoute')
-const banerRoutes = require('./routes/bannerRoutes')
+const banerRoutes = require('./routes/bannerRoutes');
+const emailRoutes = require('./routes/emailRoutes');
+
 
 const app=express() 
 
@@ -28,6 +30,9 @@ app.use('/api/shop',shopRoutes)
 
 // Banner Routes
 app.use('/api/banner',banerRoutes)
+
+// Banner Routes
+app.use('/api/email',emailRoutes)
 
 // Error Handler
 app.use(notFound)
